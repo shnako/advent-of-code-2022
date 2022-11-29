@@ -1,4 +1,4 @@
-package com.shnako.solutions.day01;
+package com.shnako.solutions.day00;
 
 import com.shnako.solutions.SolutionBase;
 
