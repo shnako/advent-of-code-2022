@@ -1,7 +1,13 @@
 package com.shnako.solutions;
 
-public interface SolutionBase {
-    String runPart1() throws Exception;
+import org.apache.commons.lang3.StringUtils;
 
-    String runPart2() throws Exception;
+public abstract class SolutionBase {
+    public abstract String runPart1() throws Exception;
+
+    public abstract String runPart2() throws Exception;
+
+    protected String getDay() {
+        return StringUtils.substringAfterLast(this.getClass().getPackageName(), ".").substring(3);
+    }
 }

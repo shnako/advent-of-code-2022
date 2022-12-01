@@ -1,18 +1,14 @@
 package com.shnako.solutions.day01;
 
 import com.shnako.solutions.SolutionBase;
+import com.shnako.util.InputProcessingUtil;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-public class Solution implements SolutionBase {
+public class Solution extends SolutionBase {
     @Override
     public String runPart1() throws Exception {
         List<Integer> elfCalories = readTotalElfCalories();
@@ -30,8 +26,8 @@ public class Solution implements SolutionBase {
                 .sum() + "";
     }
 
-    private List<Integer> readTotalElfCalories() throws IOException {
-        List<String> inputLines = readInputLines();
+    private List<Integer> readTotalElfCalories() throws Exception {
+        List<String> inputLines = InputProcessingUtil.readInputLines(getDay());
         List<Integer> elfCalories = new ArrayList<>();
         int currentElfCalories = 0;
         for (String line : inputLines) {
@@ -43,11 +39,5 @@ public class Solution implements SolutionBase {
             currentElfCalories += Integer.parseInt(line);
         }
         return elfCalories;
-    }
-
-    private List<String> readInputLines() throws IOException {
-        try (Stream<String> stream = Files.lines(Paths.get("src/main/java/com/shnako/solutions/day01/input.txt"))) {
-            return stream.collect(Collectors.toList());
-        }
     }
 }
