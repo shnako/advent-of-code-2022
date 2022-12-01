@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'application'
 }
 
 group 'com.shnako'
@@ -19,3 +20,5 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+mainClassName = 'com.shnako.Main'
