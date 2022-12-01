@@ -1,7 +1,7 @@
 package com.shnako.solutions;
 
-public abstract class SolutionBase {
-    public abstract String runPart1();
+public interface SolutionBase {
+    String runPart1() throws Exception;
 
-    public abstract String runPart2();
+    String runPart2() throws Exception;
 }

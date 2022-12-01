@@ -1,4 +1,4 @@
-package com.shnako.solutions.day00;
+package com.shnako.solutions.day01;
 
 import com.shnako.SolutionBaseTest;
 import com.shnako.solutions.SolutionBase;
@@ -11,11 +11,11 @@ public class SolutionTest implements SolutionBaseTest {
 
     @Test
     public void testPart1() throws Exception {
-        assertEquals("123", solution.runPart1());
+        assertEquals("72070", solution.runPart1());
     }
 
     @Test
     public void testPart2() throws Exception {
-        assertEquals("456", solution.runPart2());
+        assertEquals("211805", solution.runPart2());
     }
 }

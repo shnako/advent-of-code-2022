@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         String day = getDay(args);
 
         SolutionBase solution = getSolutionInstance(day);
@@ -27,7 +27,7 @@ public class Main {
         }
     }
 
-    private static void runPart(SolutionBase solution, String day, int part) {
+    private static void runPart(SolutionBase solution, String day, int part) throws Exception {
         System.out.printf("Running day %s part %d.", day, part);
 
         long start = System.currentTimeMillis();
