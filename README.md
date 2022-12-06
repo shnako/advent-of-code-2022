@@ -11,6 +11,7 @@ I tried to make the code as clean and easy to read as possible, and I've also pr
 | 03  | [Rucksack Reorganization](https://adventofcode.com/2022/day/3) | [Day 03 solution](/src/main/java/com/shnako/solutions/day03/Solution.java) | [Day 03 test](/src/test/java/com/shnako/solutions/day03/SolutionTest.java) | [Day 03 input](/src/main/java/com/shnako/solutions/day03/input.txt) | [Day 03 puzzle](/src/main/java/com/shnako/solutions/day03/puzzle.txt) |
 | 04  | [Camp Cleanup](https://adventofcode.com/2022/day/4)            | [Day 04 solution](/src/main/java/com/shnako/solutions/day04/Solution.java) | [Day 04 test](/src/test/java/com/shnako/solutions/day04/SolutionTest.java) | [Day 04 input](/src/main/java/com/shnako/solutions/day04/input.txt) | [Day 04 puzzle](/src/main/java/com/shnako/solutions/day04/puzzle.txt) |
 | 05  | [Supply Stacks](https://adventofcode.com/2022/day/5)           | [Day 05 solution](/src/main/java/com/shnako/solutions/day05/Solution.java) | [Day 05 test](/src/test/java/com/shnako/solutions/day05/SolutionTest.java) | [Day 05 input](/src/main/java/com/shnako/solutions/day05/input.txt) | [Day 05 puzzle](/src/main/java/com/shnako/solutions/day05/puzzle.txt) |
+| 06  | [Tuning Trouble](https://adventofcode.com/2022/day/6)          | [Day 06 solution](/src/main/java/com/shnako/solutions/day06/Solution.java) | [Day 06 test](/src/test/java/com/shnako/solutions/day06/SolutionTest.java) | [Day 06 input](/src/main/java/com/shnako/solutions/day06/input.txt) | [Day 06 puzzle](/src/main/java/com/shnako/solutions/day06/puzzle.txt) |
 
 ## Structure
 
