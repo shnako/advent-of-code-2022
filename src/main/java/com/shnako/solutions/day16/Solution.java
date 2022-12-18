@@ -5,17 +5,76 @@ import com.shnako.util.InputProcessingUtil;
 import lombok.Data;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("OptionalGetWithoutIsPresent")
 public class Solution extends SolutionBase {
+    private List<Valve> valves;
+    private List<Integer> functionalValveIds;
+
+    private int[][] distances;
+
     @Override
     public String runPart1() throws IOException {
-        Map<String, Valve> valveMap = readInput();
-        return exploreMemoized(30, valveMap.get("AA"), valveMap) + "";
+        valves = readInput();
+        functionalValveIds = valves
+                .stream()
+                .filter(v -> v.getFlowRate() > 0)
+                .map(Valve::getId)
+                .collect(Collectors.toList());
+        distances = floydWarshall(valves);
+        int pressure = explore(0, 30, new ArrayList<>());
+        return pressure + "";
+    }
+
+    private int explore(int myValveId, int timeRemaining, List<Integer> openValveIds) {
+        int thisPressure = openValveIds
+                .stream()
+                .map(v -> valves.get(v).getFlowRate())
+                .mapToInt(Integer::intValue)
+                .sum();
+
+        int maxSubPressure = thisPressure * timeRemaining;
+        for (int vId : functionalValveIds) {
+            int movesToOpen = distances[myValveId][vId] + 1;
+            if (timeRemaining >= movesToOpen && !openValveIds.contains(vId)) {
+                openValveIds.add(vId);
+                int subPressure = explore(vId, timeRemaining - movesToOpen, openValveIds) + thisPressure * movesToOpen;
+                if (subPressure > maxSubPressure) {
+                    maxSubPressure = subPressure;
+                }
+                openValveIds.remove(openValveIds.size() - 1);
+            }
+        }
+
+        return maxSubPressure;
+    }
+
+    private int[][] floydWarshall(List<Valve> valves) {
+        int[][] dist = new int[valves.size()][valves.size()];
+        for (int[] line : dist) {
+            Arrays.fill(line, 1000);
+        }
+        for (Valve v : valves) {
+            dist[v.getId()][v.getId()] = 0;
+            for (int neighbourId : v.getNeighbourIds()) {
+                dist[v.getId()][neighbourId] = 1;
+            }
+        }
+        for (int k = 0; k < valves.size(); k++) {
+            for (int i = 0; i < valves.size(); i++) {
+                for (int j = 0; j < valves.size(); j++) {
+                    if (dist[i][j] > dist[i][k] + dist[k][j]) {
+                        dist[i][j] = dist[i][k] + dist[k][j];
+                    }
+                }
+            }
+        }
+
+        return dist;
     }
 
     @Override
@@ -23,95 +82,42 @@ public class Solution extends SolutionBase {
         return "456";
     }
 
-    private final Map<Integer, Integer> partialResults = new HashMap<>();
-
-    private int exploreMemoized(int timeLeft, Valve currentValve, Map<String, Valve> valveMap) {
-        int hash = calculateHash(timeLeft, currentValve, valveMap);
-
-        if (partialResults.containsKey(hash)) {
-            return partialResults.get(hash);
-        }
-        int result = explore(timeLeft, currentValve, valveMap);
-        partialResults.put(hash, result);
-        return result;
-    }
-
-    // Looks like I'm having hash collisions on my input using the default implementation with 31 so rewriting with 163.
-    private int calculateHash(int timeLeft, Valve currentValve, Map<String, Valve> valveMap) {
-        int hash = 17;
-        hash = hash * 163 + timeLeft;
-        hash = hash * 163 + currentValve.hashCode();
-        for (Valve valve : valveMap.values()) {
-            hash = hash * 163 + valve.hashCode();
-        }
-        return hash;
-    }
-
-    private int explore(int timeLeft, Valve currentValve, Map<String, Valve> valveMap) {
-        int pressureReleased = valveMap.values()
+    private List<Valve> readInput() throws IOException {
+        List<Valve> valves = InputProcessingUtil.readInputLines(getDay())
                 .stream()
-                .filter(Valve::isOpen)
-                .map(Valve::getFlowRate)
-                .mapToInt(Integer::intValue)
-                .sum();
-
-        if (timeLeft == 1) {
-            return pressureReleased;
-        }
-
-        int maxPossibleForRemainingTime = 0;
-        if (!currentValve.isOpen() && currentValve.getFlowRate() > 0) {
-            currentValve.setOpen(true);
-            maxPossibleForRemainingTime = exploreMemoized(timeLeft - 1, currentValve, valveMap);
-            currentValve.setOpen(false);
-        }
-
-        for (String neighbourValveId : currentValve.getNeighbourIds()) {
-            int maxPressure = exploreMemoized(timeLeft - 1, valveMap.get(neighbourValveId), valveMap);
-            if (maxPressure > maxPossibleForRemainingTime) {
-                maxPossibleForRemainingTime = maxPressure;
+                .sorted()
+                .map(Valve::new)
+                .toList();
+        for (int i = 0; i < valves.size(); i++) {
+            Valve v = valves.get(i);
+            v.setId(i);
+            for (String neighbourName : v.getNeighbours()) {
+                v.getNeighbourIds().add(
+                        valves.indexOf(
+                                valves
+                                        .stream()
+                                        .filter(nv -> nv.getName().equals(neighbourName))
+                                        .findFirst()
+                                        .get()));
             }
         }
-
-        return pressureReleased + maxPossibleForRemainingTime;
-    }
-
-    private Map<String, Valve> readInput() throws IOException {
-        return InputProcessingUtil.readInputLines(getDay())
-                .stream()
-                .map(Valve::new)
-                .collect(Collectors.toMap(v -> v.id, v -> v));
+        return valves;
     }
 
     @Data
     private static class Valve {
-        private final String id;
-        private final int flowRate;
-        private final List<String> neighbourIds;
-        private boolean open;
+        private int id;
+        private String name;
+        private int flowRate;
+        private List<String> neighbours;
+        private List<Integer> neighbourIds;
 
-        public Valve(String inputLine) {
-            String[] components = inputLine.split("[ =;,]+");
-            id = components[1];
+        private Valve(String input) {
+            String[] components = input.split("[ =;,]+");
+            name = components[1];
             flowRate = Integer.parseInt(components[5]);
-            neighbourIds = Arrays.stream(components, 10, components.length).toList();
-        }
-
-        @Override
-        public int hashCode() {
-            int hash = 17;
-            hash = hash * 31 + id.hashCode();
-            hash = hash * 31 + Boolean.hashCode(open);
-            return hash;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (obj instanceof Valve) {
-                return this.id.equals(((Valve) obj).id);
-            } else {
-                return false;
-            }
+            neighbours = Arrays.stream(components, 10, components.length).toList();
+            neighbourIds = new ArrayList<>();
         }
     }
 }
