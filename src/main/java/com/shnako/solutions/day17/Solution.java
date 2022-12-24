@@ -4,7 +4,7 @@ import com.shnako.solutions.SolutionBase;
 import com.shnako.util.InputProcessingUtil;
 import org.apache.commons.lang3.tuple.Triple;
 
-import java.awt.*;
+import java.awt.Point;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;

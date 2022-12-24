@@ -5,7 +5,7 @@ import com.shnako.util.InputProcessingUtil;
 import lombok.Data;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.awt.*;
+import java.awt.Point;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
