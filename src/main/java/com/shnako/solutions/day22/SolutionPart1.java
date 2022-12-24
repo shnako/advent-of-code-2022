@@ -8,6 +8,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+For this solution, we keep the board as a matrix of characters and navigate it as per the rules of the puzzle.
+The complication here is the wrapping around to the other side of the map, whose location varies.
+In order to do this, once we hit the edge of the map, we keep going until we hit the next edge, wrapping around as required.
+The result is the password generated from the coordinates and direction at the end of the path.
+ */
 @SuppressWarnings("OptionalGetWithoutIsPresent")
 public class SolutionPart1 {
     private static final int[][] DIRECTIONS = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
